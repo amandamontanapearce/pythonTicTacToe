@@ -16,6 +16,16 @@ def determineFirstPlayer():
     else:
         return 'player'
 
+def getPlayerMove(board):
+    # Let the player type in their move.
+    move = ' '
+    while move not in '1 2 3 4 5 6 7 8 9'.split() or not isSpaceFree(board, int(move)):
+        print('What is your next move? (1-9)')
+        move = input()
+    return int(move)
+
+def makeMove(board, letter, move):
+    board[move] = letter
 
 print("Let's play tic-tac-toe")
 #create empty board
@@ -23,3 +33,12 @@ board=['']*10
 makeBoard(board)
 turn = determineFirstPlayer()
 print('The ' + turn + ' will go first.')
+gameIsPlaying= True
+while gameIsPlaying:
+    if turn == 'player':
+        makeBoard(board)
+        move = getPlayerMove(theBoard)
+        makeMove(theBoard, playerLetter, move)
+
+         if isWinner(theBoard, playerLetter):
+             drawBoard(theBoard)
