@@ -27,6 +27,17 @@ def getPlayerMove(board):
 def makeMove(board, letter, move):
     board[move] = letter
 
+def isWinner(board, letter):
+    # checks all possible win combos and returns True if the player has won
+    return ((bo[7] == le and bo[8] == le and bo[9] == le) or # across the top
+    (bo[4] == le and bo[5] == le and bo[6] == le) or # across the middle
+    (bo[1] == le and bo[2] == le and bo[3] == le) or # across the bottom
+    (bo[7] == le and bo[4] == le and bo[1] == le) or # down the left side
+    (bo[8] == le and bo[5] == le and bo[2] == le) or # down the middle
+    (bo[9] == le and bo[6] == le and bo[3] == le) or # down the right side
+    (bo[7] == le and bo[5] == le and bo[3] == le) or # diagonal top left/bottom right
+    (bo[9] == le and bo[5] == le and bo[1] == le)) # diagonal top right/bottom left
+
 print("Let's play tic-tac-toe")
 #create empty board
 board=['']*10
@@ -42,3 +53,5 @@ while gameIsPlaying:
 
          if isWinner(theBoard, playerLetter):
              drawBoard(theBoard)
+             print('You Won!')
+             gameIsPlaying = False
