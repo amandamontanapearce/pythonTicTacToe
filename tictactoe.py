@@ -48,10 +48,17 @@ gameIsPlaying= True
 while gameIsPlaying:
     if turn == 'player':
         makeBoard(board)
-        move = getPlayerMove(theBoard)
-        makeMove(theBoard, playerLetter, move)
+        move = getPlayerMove(board)
+        makeMove(board, playerLetter, move)
 
-         if isWinner(theBoard, playerLetter):
-             drawBoard(theBoard)
+         if isWinner(board, playerLetter):
+             drawBoard(board)
              print('You Won!')
              gameIsPlaying = False
+        else:
+             if isBoardFull(board):
+                 drawBoard(board)
+                 print('Cats game! You tied')
+                 break
+             else:
+                 turn = 'computer'
