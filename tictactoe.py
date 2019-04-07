@@ -38,6 +38,48 @@ def isWinner(board, letter):
     (bo[7] == le and bo[5] == le and bo[3] == le) or # diagonal top left/bottom right
     (bo[9] == le and bo[5] == le and bo[1] == le)) # diagonal top right/bottom left
 
+def isSpaceFree(board, move):
+    #returns true if the passed move is is free on the board that is passed
+    return board[move] == ''
+
+def getComputerMove(board, computerLetter):
+    #intakes a board and letter to determine and return makeMove
+    if computerLetter == 'X':
+        playerLetter = 'O'
+    else:
+        playerLetter = 'X'
+
+    #algorithm for tictactoe AI
+    #see if can win in next move
+    for i in range(1, 10):
+        copy = getBoardCopy(board)
+        if isSpaceFree(copy, i):
+            makeMove(copy, computerLetter, i)
+            if isWinner(copy, computerLetter)
+                return i
+
+    #Check if the player could win on thier next move, if so block themself.
+    for i in range(1, 10):
+        copy = getBoardCopy(board)
+        if isSpaceFree(copy, i):
+            makeMove(copy, playerLetter, i)
+            if isWinner(copy, playerLetter)
+                return i
+
+    #implement strategy of taking a corner if it's free
+    boardCorners = [1,3,7,9]
+    move = chooseRandomMoveFromList(board, boardCorners)
+    ifmove != None:
+        return move
+
+    #take center if free
+    if isSpaceFree(board, 5):
+        return 5
+
+    #move on a middle side
+    sideMoves = [2,4,6,8]
+    return chooseRandomMoveFromList(board, sideMoves)
+
 print("Let's play tic-tac-toe")
 #create empty board
 board=['']*10
@@ -62,3 +104,20 @@ while gameIsPlaying:
                  break
              else:
                  turn = 'computer'
+
+    else:
+        #computer's turn
+        move = getComputerMove(board, computerLetter)
+        makeMove(board,computerLetter, move)
+
+         if isWinner(board, playerLetter):
+             drawBoard(board)
+             print('You Won!')
+             gameIsPlaying = False
+        else:
+             if isBoardFull(board):
+                 drawBoard(board)
+                 print('Cats game! You tied')
+                 break
+             else:
+                 turn = 'player'
