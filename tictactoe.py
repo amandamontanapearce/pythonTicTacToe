@@ -80,6 +80,11 @@ def getComputerMove(board, computerLetter):
     sideMoves = [2,4,6,8]
     return chooseRandomMoveFromList(board, sideMoves)
 
+def playAgain():
+    #determines if the player would like to play again by retruning True
+    print('Do you want to play again? type "y" or "n"')
+    return input().lower().startwith('y')
+
 print("Let's play tic-tac-toe")
 #create empty board
 board=['']*10
@@ -121,3 +126,6 @@ while gameIsPlaying:
                  break
              else:
                  turn = 'player'
+
+    if not playAgain():
+        break
