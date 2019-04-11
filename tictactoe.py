@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 #tic tac toe
 import random
 
@@ -9,9 +11,20 @@ def makeBoard(board):
     print('---------')
     print(' '+board[1]+' | '+board[2]+' | '+board[3])
 
+def inputPlayerLetter():
+    letter=''
+    while not(letter=='X' or letter=='O'):
+        print('Do you want to be X or O?')
+        letter=input().upper()
+
+    if letter=='X':
+        return ['X','O']
+    else:
+        return ['O','X']
+
 def determineFirstPlayer():
     #randomly choose player or computer
-    if random.radient(0,1)==0:
+    if random.randint(0,1) == 0:
         return 'computer'
     else:
         return 'player'
@@ -55,7 +68,7 @@ def getComputerMove(board, computerLetter):
         copy = getBoardCopy(board)
         if isSpaceFree(copy, i):
             makeMove(copy, computerLetter, i)
-            if isWinner(copy, computerLetter)
+            if isWinner(copy, computerLetter):
                 return i
 
     #Check if the player could win on thier next move, if so block themself.
@@ -63,13 +76,13 @@ def getComputerMove(board, computerLetter):
         copy = getBoardCopy(board)
         if isSpaceFree(copy, i):
             makeMove(copy, playerLetter, i)
-            if isWinner(copy, playerLetter)
+            if isWinner(copy, playerLetter):
                 return i
 
     #implement strategy of taking a corner if it's free
     boardCorners = [1,3,7,9]
     move = chooseRandomMoveFromList(board, boardCorners)
-    ifmove != None:
+    if move != None:
         return move
 
     #take center if free
@@ -87,45 +100,48 @@ def playAgain():
 
 print("Let's play tic-tac-toe")
 #create empty board
-board=['']*10
-makeBoard(board)
-turn = determineFirstPlayer()
-print('The ' + turn + ' will go first.')
-gameIsPlaying= True
-while gameIsPlaying:
-    if turn == 'player':
-        makeBoard(board)
-        move = getPlayerMove(board)
-        makeMove(board, playerLetter, move)
 
-         if isWinner(board, playerLetter):
-             drawBoard(board)
-             print('You Won!')
-             gameIsPlaying = False
+while True:
+    #reset the board
+    board=['']*10
+    playerLetter,computerLetter = inputPlayerLetter()
+    turn = determineFirstPlayer()
+    print('The ' + turn + ' will go first.')
+    gameIsPlaying= True
+
+    while gameIsPlaying:
+        if turn == 'player':
+            makeBoard(board)
+            move = getPlayerMove(board)
+            makeMove(board, playerLetter, move)
+
+            if isWinner(board, playerLetter):
+                drawBoard(board)
+                print('You Won!')
+                gameIsPlaying = False
+            else:
+                if isBoardFull(board):
+                    drawBoard(board)
+                    print('Cats game! You tied')
+                    break
+                else:
+                    turn = 'computer'
         else:
-             if isBoardFull(board):
-                 drawBoard(board)
-                 print('Cats game! You tied')
-                 break
-             else:
-                 turn = 'computer'
+            #computer's turn
+            move = getComputerMove(board, computerLetter)
+            makeMove(board,computerLetter, move)
 
-    else:
-        #computer's turn
-        move = getComputerMove(board, computerLetter)
-        makeMove(board,computerLetter, move)
-
-         if isWinner(board, playerLetter):
-             drawBoard(board)
-             print('You Won!')
-             gameIsPlaying = False
-        else:
-             if isBoardFull(board):
-                 drawBoard(board)
-                 print('Cats game! You tied')
-                 break
-             else:
-                 turn = 'player'
+            if isWinner(board, playerLetter):
+                drawBoard(board)
+                print('You Won!')
+                gameIsPlaying = False
+            else:
+                if isBoardFull(board):
+                    drawBoard(board)
+                    print('Cats game! You tied')
+                    break
+                else:
+                    turn = 'player'
 
     if not playAgain():
         break
