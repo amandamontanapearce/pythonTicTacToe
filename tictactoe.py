@@ -11,13 +11,12 @@ def makeBoard(board):
     print('---------')
     print(' '+board[1]+' | '+board[2]+' | '+board[3])
 
-def inputPlayerLetter():
-    letter=''
-    while not(letter=='X' or letter=='O'):
-        print('Do you want to be X or O?')
-        letter=input().upper()
 
-    if letter=='X':
+def inputPlayerLetter():
+    l=''
+    while not(l=='X' or l=='O'):
+        l=raw_input("Do you want to be X or O?").upper()
+    if l=='X':
         return ['X','O']
     else:
         return ['O','X']
@@ -29,12 +28,24 @@ def determineFirstPlayer():
     else:
         return 'player'
 
+def getBoardCopy(board):
+    dupBoad = []
+    for i in board:
+        dupBoad.append(i)
+    return dupBoad
+
+def isBoardFull(board):
+    #returns true if every space is taken
+    for i in range(1,10):
+        if isSpaceFree(board,i):
+            return False
+    return True
+
 def getPlayerMove(board):
     # Let the player type in their move.
     move = ' '
     while move not in '1 2 3 4 5 6 7 8 9'.split() or not isSpaceFree(board, int(move)):
-        print('What is your next move? (1-9)')
-        move = input()
+        move = raw_input('What is your next move? (1-9)')
     return int(move)
 
 def makeMove(board, letter, move):
@@ -42,18 +53,29 @@ def makeMove(board, letter, move):
 
 def isWinner(board, letter):
     # checks all possible win combos and returns True if the player has won
-    return ((bo[7] == le and bo[8] == le and bo[9] == le) or # across the top
-    (bo[4] == le and bo[5] == le and bo[6] == le) or # across the middle
-    (bo[1] == le and bo[2] == le and bo[3] == le) or # across the bottom
-    (bo[7] == le and bo[4] == le and bo[1] == le) or # down the left side
-    (bo[8] == le and bo[5] == le and bo[2] == le) or # down the middle
-    (bo[9] == le and bo[6] == le and bo[3] == le) or # down the right side
-    (bo[7] == le and bo[5] == le and bo[3] == le) or # diagonal top left/bottom right
-    (bo[9] == le and bo[5] == le and bo[1] == le)) # diagonal top right/bottom left
+    return ((board[7] == letter and board[8] == letter and board[9] == letter) or # across the top
+    (board[4] == letter and board[5] == letter and board[6] == letter) or # across the middle
+    (board[1] == letter and board[2] == letter and board[3] == letter) or # across the bottom
+    (board[7] == letter and board[4] == letter and board[1] == letter) or # down the left side
+    (board[8] == letter and board[5] == letter and board[2] == letter) or # down the middle
+    (board[9] == letter and board[6] == letter and board[3] == letter) or # down the right side
+    (board[7] == letter and board[5] == letter and board[3] == letter) or # diagonal top left/bottom right
+    (board[9] == letter and board[5] == letter and board[1] == letter)) # diagonal top right/bottom left
 
 def isSpaceFree(board, move):
     #returns true if the passed move is is free on the board that is passed
     return board[move] == ''
+
+def chooseRandomMoveFromList(board, moveList):
+    #returns move from list if valid or returns none
+    possibleMoves = []
+    for i in moveList:
+        if isSpaceFree(board, i):
+            possibleMoves.append(i)
+    if len(possibleMoves) != 0:
+        return random.choice(possibleMoves)
+    else:
+        return None
 
 def getComputerMove(board, computerLetter):
     #intakes a board and letter to determine and return makeMove
@@ -116,12 +138,12 @@ while True:
             makeMove(board, playerLetter, move)
 
             if isWinner(board, playerLetter):
-                drawBoard(board)
+                makeBoard(board)
                 print('You Won!')
                 gameIsPlaying = False
             else:
                 if isBoardFull(board):
-                    drawBoard(board)
+                    makeBoard(board)
                     print('Cats game! You tied')
                     break
                 else:
@@ -132,12 +154,12 @@ while True:
             makeMove(board,computerLetter, move)
 
             if isWinner(board, playerLetter):
-                drawBoard(board)
+                makeBoard(board)
                 print('You Won!')
                 gameIsPlaying = False
             else:
                 if isBoardFull(board):
-                    drawBoard(board)
+                    makeBoard(board)
                     print('Cats game! You tied')
                     break
                 else:
